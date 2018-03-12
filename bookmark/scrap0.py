@@ -147,6 +147,9 @@ def meta_og_parse(html):
 def body_parse(html):
     title = html.find('title').text
     body = html.find_all('p', limit=20)
+    # logger.info('body: %s' % body)
+    body2 = ' '.join(body)
+    logger.info('body2: %s' % body2)
     body = bleach.clean(body, strip=True)
     body = BeautifulSoup(body, 'html.parser')
 

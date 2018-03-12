@@ -24,8 +24,8 @@ def scrap(request):
   # url = request.GET.get('url')
   url = 'https://www.acmicpc.net/blog/view/16'
   data = scrap0.summary(url)
-  # return HttpResponse(json.dumps(data), content_type='application/json')
-  return HttpResponse(data)
+  return HttpResponse(json.dumps(data), content_type='application/json')
+  # return HttpResponse(data)
 
 def bookmark_view():
   return
