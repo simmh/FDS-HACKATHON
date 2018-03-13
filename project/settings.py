@@ -25,8 +25,8 @@ SECRET_KEY = 'q4q)j)zjq&0h9zva48jf9z9zrt_$n&v62s1548#p$d*l+lf)5d'
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = []
-
+ALLOWED_HOSTS = ['0.0.0.0', '*', '192.168.0.193']
+# 접속 192.168.0.193:8000
 
 # Application definition
 

@@ -22,11 +22,14 @@ from bookmark import views
 
 urlpatterns = [
     path('admin/', admin.site.urls),
+    path('', views.index, name='index'),
     path('bookmark/', views.bookmark_view, name='bookmark_list'),
+    path('bookmark/search/<str:word>', views.bookmark_view, name='bookmark_create'),
     path('bookmark/<int:pk>/', views.bookmark_detail_view, name='bookmark_detail'),
     path('bookmark/create/', views.bookmark_create_view, name='bookmark_create'),
     # path('bookmark/delete/<int:pk>/', views.bookmark_delete_view, name='bookmark_delete'),
     path('bookmark/update/<int:pk>/', views.bookmark_update_view, name='bookmark_update'),
+    
     path('scrap/', views.scrap, name='scrap')
 ]
 

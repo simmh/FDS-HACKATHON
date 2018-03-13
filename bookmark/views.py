@@ -20,9 +20,13 @@ def serve_html(request, path):
     logger.info('path: %s' % path)
     return render(request, path)
 
+def index(request, message=None):
+    return render(request, 'index.html')
+
+
 def scrap(request):
-  # url = request.GET.get('url')
-  url = 'https://www.acmicpc.net/blog/view/16'
+  url = request.GET.get('url')
+  # url = 'https://www.acmicpc.net/blog/view/16'
   data = scrap0.summary(url)
   return HttpResponse(json.dumps(data), content_type='application/json')
   # return HttpResponse(data)
