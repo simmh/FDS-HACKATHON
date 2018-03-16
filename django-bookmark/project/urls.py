@@ -15,23 +15,34 @@ Including another URLconf
 """
 from django.contrib import admin
 from django.urls import path, re_path, include
+
 from django.conf import settings
 from django.conf.urls.static import static
-
+from django.conf.urls import url
+from rest_framework import routers
 from bookmark import views
 
 urlpatterns = [
     path('admin/', admin.site.urls),
     path('', views.index, name='index'),
-    path('bookmark/', views.bookmark_view, name='bookmark_list'),
-    path('bookmark/search/<str:word>/',
-         views.bookmark_view, name='bookmark_searchh'),
-    path('bookmark/<int:pk>/', views.bookmark_detail_view, name='bookmark_detail'),
-    path('bookmark/create/', views.bookmark_create_view, name='bookmark_create'),  
-    path('bookmark/star/<int:pk>/', views.bookmark_star_view, name='bookmark_star'),
-    path('bookmark/delete/<int:pk>/', views.bookmark_delete_view, name='bookmark_delete'),
-    
-    path('scrap/', views.scrap, name='scrap')
+]
+
+
+def viewz(mthd):
+    return views.BookmarkViewSet.as_view({'get': mthd})
+
+urlpatterns += [
+    path('bookmarks/', viewz('list')),
+    path('bookmarks/star/', viewz('list_star')),
+    path('bookmarks/search/<str:keyword>/', viewz('retrieve')),
+
+    path('bookmark/<int:pk>/', viewz('detail')),
+    path('bookmark/star/<int:pk>/', viewz('star')),
+
+    path('bookmark/delete/<int:pk>/', viewz('delete')),
+    path('bookmark/create/', viewz('create')),
+
+    path('summary', views.scrap),
 ]
 
 

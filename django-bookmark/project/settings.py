@@ -25,8 +25,22 @@ SECRET_KEY = 'q4q)j)zjq&0h9zva48jf9z9zrt_$n&v62s1548#p$d*l+lf)5d'
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = ['0.0.0.0', '*', '192.168.0.193']
-# 접속 192.168.0.193:8000
+CORS_ORIGIN_ALLOW_ALL =True
+CORS_ALLOW_METHODS = (
+    'DELETE',
+    'GET',
+    'OPTIONS',
+    'PATCH',
+    'POST',
+    'PUT',
+)
+
+ALLOWED_HOSTS = [
+    '*', 
+    'locahost:4200'
+    ]
+    
+
 
 # Application definition
 
@@ -44,18 +58,34 @@ INSTALLED_APPS = [
     # third-party
     'django_extensions',
     'taggit',
+    'rest_framework',
+    'corsheaders',
 
 ]
 
+REST_FRAMEWORK = {
+    'DEFAULT_PERMISSION_CLASSES': [
+        # 'rest_framework.permissions.IsAdminUser',
+    ],
+    'PAGE_SIZE': 10
+}
+
 MIDDLEWARE = [
+    # django-cors-headers
+    'corsheaders.middleware.CorsMiddleware',
+    'django.middleware.common.CommonMiddleware',
+    # core
     'django.middleware.security.SecurityMiddleware',
     'django.contrib.sessions.middleware.SessionMiddleware',
     'django.middleware.common.CommonMiddleware',
-    # 'django.middleware.csrf.CsrfViewMiddleware',
+    'django.middleware.csrf.CsrfViewMiddleware',
     'django.contrib.auth.middleware.AuthenticationMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
+
 ]
+
+
 
 ROOT_URLCONF = 'project.urls'
 

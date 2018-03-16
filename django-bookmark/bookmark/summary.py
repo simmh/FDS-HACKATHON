@@ -46,7 +46,14 @@ def scrap(url):
 
     def get_html_and_bs(url):   
         headers = {'Referer': url,'user-agent': 'my-app/0.0.1'}
-        html = requests.get(url, headers=headers).text
+        headers2 = {
+            'User-agent': 'Mozilla/5.0 (Windows NT 6.1; WOW64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/29.0.1547.76 Safari/537.36',
+            'Accept': 'text/html,application/xhtml+xml,application/xml;q=0.9,*/*;q=0.8',
+            'Accept-Encoding': 'gzip,deflate,sdch',
+            'Referer': 'http://aussietaste.recipes/vegetables/leek-vegetables/leek-and-sweet-potato-gratin/'
+        }
+
+        html = requests.get(url, headers=headers2).text
         html_bs = BeautifulSoup(html, 'html.parser')
         return {'html': html, 'bs': html_bs}
 
@@ -130,10 +137,16 @@ def scrap(url):
         data = get_metadata_parser(url)
 
     def get_favicon():
-        bs = get_html_and_bs(url)['bs']
-        # logger.info('get_favico: %s' % bs)
-        fvc_url = bs.find(rel='shortcut').get('href')
-        fvc_parsed_url = urlparse(fvc_url)
+        try:
+            bs = get_html_and_bs(url)['bs']
+            # logger.info('get_favico: %s' % bs)
+            fvc_url = bs.find(rel='icon').get('href')
+            fvc_parsed_url = urlparse(fvc_url)
+        except:
+            logger.info('get_favico Fail')
+            return None
+        
+
         if not fvc_parsed_url.netloc:
             fvc_url = parsed_url.scheme + '://' + parsed_url.netloc + fvc_url
         return fvc_url
@@ -152,7 +165,7 @@ def scrap(url):
         img_parsed_url = urlparse(data['image'])
         if not img_parsed_url.netloc:
             data['image'] = img_parsed_url.scheme + \
-                '://' + img_parsed_url.netloc + data['image']
+                '://' + parsed_url.netloc + data['image']
 
     
     
@@ -165,7 +178,7 @@ def scrap(url):
         'favicon': get_favicon(),
 #         'source_url':,
     }
-    logger.info('data: %s' % meta_data)
+    logger.info('[SUMMARY meta_data]: %s' % meta_data)
     
     return meta_data
 

@@ -85,8 +85,6 @@ def bookmark_detail_view(request, pk):
   return HttpResponse(json.dumps(res), content_type = 'application/json')
 
 
-
-
 def bookmark_create_view(request):
   try:
     url = request.GET.get('url')
