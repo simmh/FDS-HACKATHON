@@ -11,6 +11,7 @@ class Bookmark {
     public favicon: string,
     public image: string,
     public star: boolean,
+    public check: boolean
   ) {}
 }
 
@@ -36,11 +37,14 @@ export class BookmarkComponent implements OnInit {
   title: 'BOOKMARK';
   bookmarksDB: Bookmark[];
   bookmarks: any;
-  summary: Summary;
 
+  summary: string;
+  inputURL2: string;
   checkStatus = false;
   toggleStar = false;
   toggleTrash = false;
+
+  urlvalue: string;
 
   checkList = [];
 
@@ -65,7 +69,9 @@ export class BookmarkComponent implements OnInit {
   }
 
   getSummary(url) {
-    console.log('[GET SUMMARY]')
+    console.log('[GET SUMMARY]');
+    // 이벤트 중지?
+    // event.preventdefault();
     const host = 'http://localhost:8000/summary?url=';
     this.http.get(host + url, { observe: 'response' })
       // 요청 결과를 프로퍼티에 할당
@@ -98,7 +104,10 @@ export class BookmarkComponent implements OnInit {
         const item = Object.assign({}, data.body, { id: this.generateId()} );
         this.bookmarksDB = [item, ...this.bookmarks];
         this.getBookmarks();
-        this.inputURL.value= '';
+        this.summary = '';
+        this.urlvalue = '';
+ 
+        console.log('bookmarkAdd summary', data);
         // this.summary = this.Summary;
       }, (err: HttpErrorResponse) => {
         // this.summary = Summary;
@@ -134,8 +143,12 @@ export class BookmarkComponent implements OnInit {
       });
     } else {
       this.getBookmarks();
+
+      this.checkStatus = false;
+      this.toggleStar = false;
+      this.toggleTrash = false;
     }
-    this.toggleStar = !this.toggleStar;
+    // this.toggleStar = !this.toggleStar;
   }
 
   setStarBookmark(id: number) {
@@ -156,20 +169,38 @@ export class BookmarkComponent implements OnInit {
   }
 
   checkCard(id: number) {
+    if (!this.checkStatus) { return }
     const checkList = this.checkList;
 
     const checkIndex = checkList.indexOf(id);
     if  ( checkIndex < 0 ) {
       // 추가
       this.checkList = [...checkList, id];
+
+      // 체크 false
+      this.bookmarks = this.bookmarks.map(function(item) {
+        if (item.id === id)  {item.check = true; }
+        return item;
+      });
+
     } else {
-      this.checkList = checkList.filter(function(item, index){
+      this.checkList = checkList.filter(function(item, index) {
         return item !== id;
+      });
+
+      // 체크 true
+      this.bookmarks = this.bookmarks.map(function (item) {
+        if (item.id === id) { item.check = false; }
+        return item;
       });
     }
     console.log('[Check id]', id);
     console.log('[Check list]', this.checkList);
     console.log('[Check list is id  index??]', (checkIndex));
+  }
+
+  clearURL() {
+    console.log('[Clear URL adn Preview]');
   }
 
   setBookmarks() {
@@ -182,7 +213,7 @@ export class BookmarkComponent implements OnInit {
 
         console.log(bookmark);
       });
-  } 
+  }
 
   ngOnInit() {
     this.setBookmarks();
