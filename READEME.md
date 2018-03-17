@@ -12,7 +12,7 @@ https://getpocket.com/
 
 
 
-## Pocket 사용!
+## 
 
 글을 읽다가 어떠한 이유로 나중에 읽어야 할때...
 
